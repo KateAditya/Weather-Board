@@ -45,37 +45,37 @@ interface WeatherData {
 
 const fetchWeatherData = async (location: string): Promise<WeatherData> => {
   console.log('Fetching weather data for:', location);
-  
+
   // First, get coordinates from city name
   const geocodeResponse = await fetch(
     `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(location)}&limit=1&appid=${API_KEY}`
   );
-  
+
   if (!geocodeResponse.ok) {
     throw new Error('Failed to fetch location coordinates');
   }
-  
+
   const geocodeData = await geocodeResponse.json();
-  
+
   if (!geocodeData || geocodeData.length === 0) {
     throw new Error('Location not found');
   }
-  
+
   const { lat, lon } = geocodeData[0];
   console.log('Coordinates found:', lat, lon);
-  
-  // Then fetch weather data using coordinates
+
+  // ---- FIX: Use v2.5 One Call API (free) ----
   const weatherResponse = await fetch(
-    `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric&exclude=minutely,alerts`
+    `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric&exclude=minutely,alerts`
   );
-  
+
   if (!weatherResponse.ok) {
     throw new Error('Failed to fetch weather data');
   }
-  
+
   const weatherData = await weatherResponse.json();
   console.log('Weather data received:', weatherData);
-  
+
   return weatherData;
 };
 
