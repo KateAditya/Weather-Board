@@ -1,66 +1,90 @@
 
-import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 
-// Mock weather data for demo purposes
-const mockWeatherData = {
+const API_KEY = 'c79aa811ad80bcc6f5cd789573593ae4';
+
+interface WeatherData {
   current: {
-    temp: 22,
-    feels_like: 24,
-    humidity: 65,
-    pressure: 1013,
-    uvi: 5,
-    visibility: 10000,
-    wind_speed: 3.5,
-    sunrise: 1703145600,
-    sunset: 1703181600,
-    weather: [
-      {
-        main: 'Clear',
-        description: 'clear sky',
-        icon: '01d'
-      }
-    ]
-  },
-  hourly: Array.from({ length: 48 }, (_, i) => ({
-    dt: Date.now() / 1000 + i * 3600,
-    temp: 22 + Math.sin(i / 4) * 8,
-    pop: Math.random() * 0.3,
-    weather: [
-      {
-        main: i % 3 === 0 ? 'Rain' : 'Clear',
-        icon: i % 3 === 0 ? '10d' : '01d'
-      }
-    ]
-  })),
-  daily: Array.from({ length: 7 }, (_, i) => ({
-    dt: Date.now() / 1000 + i * 86400,
+    temp: number;
+    feels_like: number;
+    humidity: number;
+    pressure: number;
+    uvi: number;
+    visibility: number;
+    wind_speed: number;
+    sunrise: number;
+    sunset: number;
+    weather: Array<{
+      main: string;
+      description: string;
+      icon: string;
+    }>;
+  };
+  hourly: Array<{
+    dt: number;
+    temp: number;
+    pop: number;
+    weather: Array<{
+      main: string;
+      icon: string;
+    }>;
+  }>;
+  daily: Array<{
+    dt: number;
     temp: {
-      min: 15 + Math.random() * 5,
-      max: 25 + Math.random() * 8
-    },
-    weather: [
-      {
-        main: i % 2 === 0 ? 'Sunny' : 'Cloudy',
-        description: i % 2 === 0 ? 'sunny' : 'partly cloudy',
-        icon: i % 2 === 0 ? '01d' : '02d'
-      }
-    ]
-  }))
+      min: number;
+      max: number;
+    };
+    weather: Array<{
+      main: string;
+      description: string;
+      icon: string;
+    }>;
+  }>;
+}
+
+const fetchWeatherData = async (location: string): Promise<WeatherData> => {
+  console.log('Fetching weather data for:', location);
+  
+  // First, get coordinates from city name
+  const geocodeResponse = await fetch(
+    `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(location)}&limit=1&appid=${API_KEY}`
+  );
+  
+  if (!geocodeResponse.ok) {
+    throw new Error('Failed to fetch location coordinates');
+  }
+  
+  const geocodeData = await geocodeResponse.json();
+  
+  if (!geocodeData || geocodeData.length === 0) {
+    throw new Error('Location not found');
+  }
+  
+  const { lat, lon } = geocodeData[0];
+  console.log('Coordinates found:', lat, lon);
+  
+  // Then fetch weather data using coordinates
+  const weatherResponse = await fetch(
+    `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric&exclude=minutely,alerts`
+  );
+  
+  if (!weatherResponse.ok) {
+    throw new Error('Failed to fetch weather data');
+  }
+  
+  const weatherData = await weatherResponse.json();
+  console.log('Weather data received:', weatherData);
+  
+  return weatherData;
 };
 
 export const useWeatherData = (location: string) => {
   return useQuery({
     queryKey: ['weather', location],
-    queryFn: async () => {
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // In a real app, you would make an API call here
-      // const response = await fetch(`https://api.openweathermap.org/data/2.5/onecall?q=${location}&appid=${API_KEY}&units=metric`);
-      // return response.json();
-      
-      return mockWeatherData;
-    },
+    queryFn: () => fetchWeatherData(location),
+    enabled: !!location,
+    retry: 2,
+    staleTime: 5 * 60 * 1000, // 5 minutes
   });
 };

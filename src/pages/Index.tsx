@@ -12,7 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const Index = () => {
   const [location, setLocation] = useState('London');
-  const { weatherData, isLoading, error } = useWeatherData(location);
+  const { data: weatherData, isLoading, error } = useWeatherData(location);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-400 via-blue-500 to-purple-600">
