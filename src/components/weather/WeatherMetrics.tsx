@@ -3,8 +3,18 @@ import React from 'react';
 import { Card } from '@/components/ui/card';
 import { Wind, Droplets, Eye, Gauge, Sunrise, Sunset } from 'lucide-react';
 
+interface WeatherData {
+  wind_speed: number;
+  humidity: number;
+  visibility: number;
+  pressure: number;
+  sunrise: number;
+  sunset: number;
+  uvi?: number;
+}
+
 interface WeatherMetricsProps {
-  data: any;
+  data: WeatherData;
 }
 
 export const WeatherMetrics = ({ data }: WeatherMetricsProps) => {
@@ -49,29 +59,32 @@ export const WeatherMetrics = ({ data }: WeatherMetricsProps) => {
 
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-      {metrics.map((metric, index) => (
-        <Card key={index} className="p-4 bg-white/10 backdrop-blur-md border-white/20">
-          <div className="flex items-center gap-3">
-            <metric.icon className={`h-5 w-5 ${metric.color}`} />
-            <div>
-              <p className="text-white/60 text-sm">{metric.label}</p>
-              <p className="text-white font-semibold">{metric.value}</p>
-            </div>
+  {metrics
+    .filter((metric) => metric.value !== null && metric.value !== undefined)
+    .map((metric, index) => (
+      <Card key={index} className="p-4 bg-white/10 backdrop-blur-md border-white/20">
+        <div className="flex items-center gap-3">
+          <metric.icon className={`h-5 w-5 ${metric.color}`} />
+          <div>
+            <p className="text-white/60 text-sm">{metric.label}</p>
+            <p className="text-white font-semibold">{metric.value}</p>
           </div>
-        </Card>
-      ))}
-      
-      {data.uvi && (
-        <Card className="p-4 bg-white/10 backdrop-blur-md border-white/20">
-          <div className="flex items-center gap-3">
-            <span className="text-yellow-300">☀️</span>
-            <div>
-              <p className="text-white/60 text-sm">UV Index</p>
-              <p className="text-white font-semibold">{Math.round(data.uvi)}</p>
-            </div>
-          </div>
-        </Card>
-      )}
-    </div>
+        </div>
+      </Card>
+  ))}
+
+  {data.uvi > 0 && (
+    <Card className="p-4 bg-white/10 backdrop-blur-md border-white/20">
+      <div className="flex items-center gap-3">
+        <span className="text-yellow-300">☀️</span>
+        <div>
+          <p className="text-white/60 text-sm">UV Index</p>
+          <p className="text-white font-semibold">{Math.round(data.uvi)}</p>
+        </div>
+      </div>
+    </Card>
+  )}
+</div>
+
   );
 };

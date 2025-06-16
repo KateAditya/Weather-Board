@@ -3,8 +3,17 @@ import React from 'react';
 import { Card } from '@/components/ui/card';
 import { getWeatherIcon } from '@/utils/weatherUtils';
 
+interface WeatherData {
+  temp: number;
+  feels_like: number;
+  weather: {
+    description: string;
+    icon: string;
+  }[];
+}
+
 interface CurrentWeatherProps {
-  data: any;
+  data: WeatherData;
   location: string;
 }
 

@@ -1,17 +1,17 @@
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { WeatherHeader } from '@/components/weather/WeatherHeader';
 import { CurrentWeather } from '@/components/weather/CurrentWeather';
 import { WeatherMetrics } from '@/components/weather/WeatherMetrics';
 import { HourlyForecast } from '@/components/weather/HourlyForecast';
 import { WeeklyForecast } from '@/components/weather/WeeklyForecast';
-import { WeatherMap } from '@/components/weather/WeatherMap';
 import { LocationSearch } from '@/components/weather/LocationSearch';
 import { useWeatherData } from '@/hooks/useWeatherData';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
+const WeatherMap = React.lazy(() => import('@/components/weather/WeatherMap'));
+
 const Index = () => {
-  const [location, setLocation] = useState('London');
+  const [location, setLocation] = useState('Pune');
   const { data: weatherData, isLoading, error } = useWeatherData(location);
 
   return (
@@ -51,13 +51,58 @@ const Index = () => {
             </TabsContent>
             
             <TabsContent value="map">
-              <WeatherMap location={location} />
+              <Suspense fallback={<div>Loading map...</div>}>
+                <WeatherMap location={location} />
+              </Suspense>
             </TabsContent>
           </Tabs>
         )}
+        
+        {/* Copyright Footer */}
+         <footer className="bg-black text-white py-8 px-4 mt-12">
+      <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 text-sm">
+
+        {/* Contact Info */}
+        <div className="text-center md:text-left space-y-1">
+          <p>📞 +91-9545534104</p>
+          <p>📧 adityakate300@gmail.com</p>
+        </div>
+
+        {/* Social Links */}
+        <div className="text-center space-y-1">
+          <div className="flex justify-center md:justify-start gap-4">
+            <a
+              href="https://github.com/KateAditya"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-blue-400 transition"
+            >
+              🔗 GitHub
+            </a>
+            <a
+              href="https://www.linkedin.com/in/aditya-kate"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-blue-400 transition"
+            >
+              🔗 LinkedIn
+            </a>
+          </div>
+          <p className="text-gray-400">Portfolio: Coming Soon</p>
+        </div>
+      </div>
+
+      {/* Copyright */}
+      <p className="text-center text-white opacity-70 mt-6 text-xs">
+        © 2025 Made by <span className="font-semibold">AK_2003</span> ❤️
+      </p>
+    </footer>
       </div>
     </div>
   );
 };
 
 export default Index;
+
+
+
