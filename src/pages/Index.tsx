@@ -16,7 +16,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-400 via-blue-500 to-purple-600">
-      <div className="container mx-auto px-4 py-6">
+      <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-6 max-w-5xl">
         <WeatherHeader />
         
         <LocationSearch onLocationChange={setLocation} />
@@ -59,44 +59,44 @@ const Index = () => {
         )}
         
         {/* Copyright Footer */}
-         <footer className="bg-black text-white py-8 px-4 mt-12">
-      <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 text-sm">
+        <footer className="bg-black text-white py-6 sm:py-8 px-4 mt-8 sm:mt-12 rounded-lg">
+          <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 sm:gap-6 text-sm">
 
-        {/* Contact Info */}
-        <div className="text-center md:text-left space-y-1">
-          <p>📞 +91-9545534104</p>
-          <p>📧 adityakate300@gmail.com</p>
-        </div>
+            {/* Contact Info */}
+            <div className="text-center md:text-left space-y-1">
+              <p>📞 +91-9545534104</p>
+              <p>📧 adityakate300@gmail.com</p>
+            </div>
 
-        {/* Social Links */}
-        <div className="text-center space-y-1">
-          <div className="flex justify-center md:justify-start gap-4">
-            <a
-              href="https://github.com/KateAditya"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-blue-400 transition"
-            >
-              🔗 GitHub
-            </a>
-            <a
-              href="https://www.linkedin.com/in/aditya-kate"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-blue-400 transition"
-            >
-              🔗 LinkedIn
-            </a>
+            {/* Social Links */}
+            <div className="text-center space-y-1">
+              <div className="flex justify-center md:justify-start gap-4">
+                <a
+                  href="https://github.com/KateAditya"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-blue-400 transition"
+                >
+                  🔗 GitHub
+                </a>
+                <a
+                  href="https://www.linkedin.com/in/aditya-kate"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-blue-400 transition"
+                >
+                  🔗 LinkedIn
+                </a>
+              </div>
+              <p className="text-gray-400">Portfolio: Coming Soon</p>
+            </div>
           </div>
-          <p className="text-gray-400">Portfolio: Coming Soon</p>
-        </div>
-      </div>
 
-      {/* Copyright */}
-      <p className="text-center text-white opacity-70 mt-6 text-xs">
-        © 2025 Made by <span className="font-semibold">AK_2003</span> ❤️
-      </p>
-    </footer>
+          {/* Copyright */}
+          <p className="text-center text-white opacity-70 mt-6 text-xs">
+            © 2025 Made by <span className="font-semibold">AK_2003</span> ❤️
+          </p>
+        </footer>
       </div>
     </div>
   );
