@@ -2,7 +2,7 @@
 
 ## Project info
 
-**URL**: 
+**URL**: https://weatherboardpro.netlify.app/
 
 This project is built with:
 
